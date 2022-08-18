@@ -14,9 +14,7 @@ This repository contains a variety of reuseable utility functions that can be in
 https://stackoverflow.com/questions/1082580/how-to-build-jars-from-intellij-properly
 
 From link:
-File -> Project Structure -> Project Settings -> Artifacts -> Click green plus sign -> Jar -> From modules with dependencies...
-Select a Main Class (the one with main() method) if you need to make the jar runnable.
-The above sets the "skeleton" to where the jar will be saved to. To actually build and save it do the following:
+File -> Project Structure -> Project Settings -> Artifacts -> Plus sign -> Jar -> From modules with dependencies
 Extract to the target Jar
 OK
 Build | Build Artifact | Build
