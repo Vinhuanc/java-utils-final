@@ -2,12 +2,6 @@
 
 A variety of Kafka utilities have been designed for reuse with different situations in mind. See the list below to see the types of producers and consumers supported.
 
-.
-├──_producer/ # different Kafka producers
-│  └── BasicProducer.java # basic
-├──_consumer/ # different Kafka consumers
-│  └── BasicConsumer.java # basic
-
 
 ## Kafka Configuration
 
