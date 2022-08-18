@@ -1,6 +1,6 @@
 # Kafka Utils
 
-A variety of Kafka utilities have been designed for reuse with different situations in mind. See the list below to see the types of producers and consumers supported.
+Kafka utilities designed for reuse with different situations in mind. 
 
 
 ## Kafka Configuration
