@@ -1,4 +1,4 @@
-#Kafka Utils
+# Kafka Utils
 
 A variety of Kafka utilities have been designed for reuse with different situations in mind. See the list below to see the types of producers and consumers supported.
 
@@ -9,12 +9,12 @@ A variety of Kafka utilities have been designed for reuse with different situati
 │  └── BasicConsumer.java # basic
 
 
-##Kafka Configuration
+## Kafka Configuration
 
 For every utility the first parameter is configMap. The config map can contain any key/value pair that is expected for the producer and consumer config properties. 
 
 
-###Example configuration map for consumer:
+### Example configuration map for consumer:
 
 ```
         //collection of config properties
@@ -28,7 +28,7 @@ For every utility the first parameter is configMap. The config map can contain a
         kafkaConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 ```
 
-###Example configuration map for consumer:
+### Example configuration map for consumer:
 
 ```
         //collection of config properties
@@ -40,7 +40,7 @@ For every utility the first parameter is configMap. The config map can contain a
         kafkaConfig.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 ```
 
-##Utility Feature List
+## Utility Feature List
 
 Automatic Batching based on inputted message type (list vs dict)
 Kafka callbacks
