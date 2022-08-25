@@ -37,4 +37,5 @@ For every utility the first parameter is configMap. The config map can contain a
 ## Utility Feature List
 
 Automatic Batching based on inputted message type
+
 Kafka callbacks
