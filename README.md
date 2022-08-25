@@ -37,6 +37,7 @@ Add dependency to pom:
     <systemPath>${project.basedir}/src/main/resources/Name_Your_JAR.jar</systemPath>    
 </dependency>
 ```
+Or
 
 IntelliJ: File -> Project Structure -> Project Settings -> Libraries -> add library
 
