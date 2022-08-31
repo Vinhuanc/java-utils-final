@@ -86,6 +86,6 @@ public class BasicProducer {
         }
     }
 
-    private BasicProducer() {
+    public BasicProducer() {
     }
 }

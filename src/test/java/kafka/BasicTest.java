@@ -1,7 +1,7 @@
 package kafka;
 
 import kafka.producer.BasicProducer;
-import kafka.consumer.BasicConsumer;
+//import kafka.consumer.BasicConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -76,7 +76,7 @@ public class BasicTest {
         kafkaConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         String topic = "test-topic";
 
-        BasicConsumer.consumer(kafkaConfig, topic);
+    //    BasicConsumer.consumer(kafkaConfig, topic);
     }
 
 }

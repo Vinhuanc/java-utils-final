@@ -71,6 +71,6 @@ public class BasicConsumer {
         }
     }
 
-    private BasicConsumer() {
+    public BasicConsumer() {
     }
 }
