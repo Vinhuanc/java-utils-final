@@ -8,6 +8,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.errors.SerializationException;
 
+import java.io.File;
 import java.util.Properties;
 
 public class ConfluentProducer {
@@ -40,6 +41,8 @@ public class ConfluentProducer {
                 "    }\n" +
                 "  ]\n" +
                 "}";
+
+
         Schema.Parser parser = new Schema.Parser();
         Schema schema = parser.parse(userSchema);
         GenericRecord avroRecord = new GenericData.Record(schema);
@@ -47,8 +50,7 @@ public class ConfluentProducer {
         avroRecord.put("Name", "Eli");
         avroRecord.put("major", "Aerospace Engineering");
 
-        avroRecord.put("Name","Sydney");
-        avroRecord.put("major", "Economics");
+
         ProducerRecord<Object, Object> record = new ProducerRecord<>("StudentTopic", key, avroRecord);
         try {
             producer2.send(record);
