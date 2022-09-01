@@ -1,6 +1,8 @@
 package kafka.consumer;
 
+import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.*;
 
@@ -15,9 +17,10 @@ public class ReusableAvroConsumer {
             configMap.forEach(properties::setProperty);
             properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
             properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
-            properties.put("schema.registry.url", schema_url);
+            properties.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schema_url);
             properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
             properties.put(ConsumerConfig.GROUP_ID_CONFIG, "group5");
+         //   properties.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
 
             final Consumer<String, GenericRecord> consumer = new KafkaConsumer<>(properties);
             consumer.subscribe(Arrays.asList(topic));

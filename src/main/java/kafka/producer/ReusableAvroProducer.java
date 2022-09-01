@@ -1,5 +1,6 @@
 package kafka.producer;
 
+import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
@@ -20,7 +21,7 @@ public class ReusableAvroProducer {
             configMap.forEach(properties::setProperty);
             properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
             properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
-            properties.put("schema.registry.url", schema_url);
+            properties.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schema_url);
             KafkaProducer producer = new KafkaProducer(properties);
 
 
@@ -39,6 +40,8 @@ public class ReusableAvroProducer {
                 producer.flush();
                 producer.close();
             }
+      //      System.out.print(record);
+        //    System.out.print(avroRecord);
 
         }
     }
