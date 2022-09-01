@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class ReusableAvroProducer {
-    public static void produce(Map<String, String> configMap, String topic, String key, String userSchema, String schema_url){
+    public static void produce(Map<String, String> configMap, String topic, String key, GenericRecord avroRecord, String schema_url){
         if (configMap.containsKey("bootstrap.servers") && configMap.containsKey("client.id")) {
             Properties properties = new Properties();
             configMap.forEach(properties::setProperty);
@@ -23,11 +23,14 @@ public class ReusableAvroProducer {
             properties.put("schema.registry.url", schema_url);
             KafkaProducer producer = new KafkaProducer(properties);
 
-            Schema.Parser parser = new Schema.Parser();
-            Schema schema = parser.parse(userSchema);
-            GenericRecord avroRecord = new GenericData.Record(schema);
-          //  avroRecord.put(key, configMap.values());
+
+//            String userSchema = schema_path;
+//            Schema.Parser parser = new Schema.Parser();
+//            Schema schema = parser.parse(userSchema);
+//            GenericRecord avroRecord = new GenericData.Record(schema);
+//            avroRecord.put("key", " ");
             ProducerRecord<Object, Object> record = new ProducerRecord<>(topic, key, avroRecord);
+
             try {
                 producer.send(record);
             } catch (SerializationException e) {

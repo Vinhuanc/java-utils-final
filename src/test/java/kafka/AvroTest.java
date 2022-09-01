@@ -20,43 +20,27 @@ public class AvroTest {
             configMap.put("schema.registry.url", "http://localhost:8081");
 
             ReusableAvroProducer reusableAvroProducer = new ReusableAvroProducer();
-            reusableAvroProducer.produce(configMap, "topicTest", "key1", " {\n" +
-                    "  \"type\": \"record\",\n" +
-                    "  \"name\": \"students\",\n" +
-                    "  \"fields\": [\n" +
-                    "    {\n" +
-                    "      \"name\": \"Name\",\n" +
-                    "      \"type\": \"string\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"name\": \"major\",\n" +
-                    "      \"type\": \"string\"\n" +
-                    "    }\n" +
-                    "  ]\n" +
-                    "}", "http://localhost:8081");
-            String userSchema =" {\n" +
-                    "  \"type\": \"record\",\n" +
-                    "  \"name\": \"students\",\n" +
-                    "  \"fields\": [\n" +
-                    "    {\n" +
-                    "      \"name\": \"Name\",\n" +
-                    "      \"type\": \"string\"\n" +
-                    "    },\n" +
-                    "    {\n" +
-                    "      \"name\": \"major\",\n" +
-                    "      \"type\": \"string\"\n" +
-                    "    }\n" +
-                    "  ]\n" +
-                    "}";
-            String key = "key1";
 
-
-            Schema.Parser parser = new Schema.Parser();
-            Schema schema = parser.parse(userSchema);
-            GenericRecord avroRecord = new GenericData.Record(schema);
+         String userSchema =" {\n" +
+                 "  \"type\": \"record\",\n" +
+                 "  \"name\": \"students\",\n" +
+                 "  \"fields\": [\n" +
+                 "    {\n" +
+                 "      \"name\": \"Name\",\n" +
+                 "      \"type\": \"string\"\n" +
+                 "    },\n" +
+                 "    {\n" +
+                 "      \"name\": \"major\",\n" +
+                 "      \"type\": \"string\"\n" +
+                 "    }\n" +
+                 "  ]\n" +
+                 "}";
+         Schema.Parser parser = new Schema.Parser();
+         Schema schema = parser.parse(userSchema);
+         GenericRecord avroRecord = new GenericData.Record(schema);
             avroRecord.put("Name", "Sydney");
             avroRecord.put("major", "business administration");
-
+         reusableAvroProducer.produce(configMap, "topicTest", "key1", avroRecord, "http://localhost:8081");
 
         }
         @Test

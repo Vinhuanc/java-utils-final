@@ -1,4 +1,5 @@
 {
+  "namespace" : "school",
   "type": "record",
   "name": "students",
   "fields": [

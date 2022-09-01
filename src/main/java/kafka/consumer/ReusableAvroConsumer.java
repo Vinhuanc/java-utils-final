@@ -17,8 +17,9 @@ public class ReusableAvroConsumer {
             properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
             properties.put("schema.registry.url", schema_url);
             properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+            properties.put(ConsumerConfig.GROUP_ID_CONFIG, "group5");
 
-            final Consumer<String, GenericRecord> consumer = new KafkaConsumer<String, GenericRecord>(properties);
+            final Consumer<String, GenericRecord> consumer = new KafkaConsumer<>(properties);
             consumer.subscribe(Arrays.asList(topic));
 
             try {
