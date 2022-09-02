@@ -1,13 +1,12 @@
 package kafka;
 import kafka.producer.*;
-import kafka.consumer.*;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.junit.Test;
-
+import kafka.consumer.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public class AvroTest {
             configMap.put(ProducerConfig.CLIENT_ID_CONFIG, "test");
             configMap.put("schema.registry.url", "http://localhost:8081");
 
-            ReusableAvroProducer reusableAvroProducer = new ReusableAvroProducer();
+            AvroProducer reusableAvroProducer = new AvroProducer();
 
          String userSchema =" {\n" +
                  "  \"type\": \"record\",\n" +
@@ -53,7 +52,7 @@ public class AvroTest {
             configMap.put("schema.registry.url", "http://localhost:8081");
             configMap.put(ConsumerConfig.GROUP_ID_CONFIG, "group1");
 
-            ReusableAvroConsumer reusableAvroConsumer = new ReusableAvroConsumer();
+            AvroConsumer reusableAvroConsumer = new AvroConsumer();
             reusableAvroConsumer.consume(configMap, "topicTest","http://localhost:8081");
         }
 
