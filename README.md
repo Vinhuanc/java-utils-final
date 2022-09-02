@@ -63,5 +63,5 @@ The avroConsumer method takes in a configuration map, topic name, and schema URL
 <strong>
 Additional Notes: </strong> <br>
     Please see AvroTest > testConsumer() method as a example. <br>
-    ![Screen Shot 2022-09-02 at 11 53 49 AM](https://user-images.githubusercontent.com/102390736/188202041-fd42b7ba-e36b-45a2-8d85-dc30f809ffaa.png)
+    ![example](https://user-images.githubusercontent.com/102390736/188202389-e91921f7-39c4-4e59-80d9-1763225cc342.JPG)
 
