@@ -39,8 +39,7 @@ public class AvroTest {
          GenericRecord avroRecord = new GenericData.Record(schema);
             avroRecord.put("Name", "Sydney");
             avroRecord.put("major", "business administration");
-            avroRecord.put("Name", "Andy");
-            avroRecord.put("major", "history");
+
          reusableAvroProducer.produce(configMap, "topicTest", "key1", avroRecord, "http://localhost:8081");
 
         }
