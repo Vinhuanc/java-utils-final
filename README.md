@@ -42,4 +42,26 @@ IntelliJ: File -> Project Structure -> Project Settings -> Libraries -> add libr
 
 https://www.jetbrains.com/help/idea/library.html
 
+<h3> How to use Avro Consumer </h3>
+
+The avroConsumer method takes in a configuration map, topic name, and schema URL. To use the schema method, do this: <br>
+1. <strong>Make a configuration map. Within the configuration map, declare a bootstrap server, client id, schema registry URl, and group id.</strong> <br>
+   example:  <br>
+            Map<String, String> configMap = new HashMap<>();
+            configMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+            configMap.put(ConsumerConfig.CLIENT_ID_CONFIG, "test");
+            configMap.put("schema.registry.url", "http://localhost:8081");
+            configMap.put(ConsumerConfig.GROUP_ID_CONFIG, "group1");
+            
+2. <strong> Create the avroConsumer class as an object.</strong> <br>
+    example: <br>
+            AvroConsumer reusableAvroConsumer = new AvroConsumer();
+    
+3. <strong> Call the avroConsumer method. Insert your configuration map, topic name, and schema registry URL. </strong> <br>
+    example: <br>
+            reusableAvroConsumer.consume(configMap, "topicTest","http://localhost:8081"); <br>
+<strong>
+Additional Notes: </strong> <br>
+    Please see AvroTest > testConsumer() method as a example. <br>
+    ![example](https://user-images.githubusercontent.com/102390736/188202389-e91921f7-39c4-4e59-80d9-1763225cc342.JPG)
 
