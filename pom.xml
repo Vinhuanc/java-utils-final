@@ -123,12 +123,89 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-avro</artifactId>
+            <version>3.18.2</version>
+            <!-- use the same version as your Camel core version -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-avro</artifactId>
+            <version>x.x.x</version>
+            <!-- use the same version as your Camel core version -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>3.18.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-kafka</artifactId>
+            <version>3.18.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-servlet</artifactId>
+            <version>3.18.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-http-starter</artifactId>
+            <version>2.25.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-stream</artifactId>
+            <version>3.18.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-componentdsl</artifactId>
+            <version>3.4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-context</artifactId>
+            <version>2.25.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>spi-annotations</artifactId>
+            <version>3.18.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
+    <profiles>
 
+        <profile>
+            <id>kafka-producer</id>
+            <properties>
+                <target.main.class>org.apache.camel.example.kafka.MessagePublisherClient</target.main.class>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>kafka-consumer</id>
+            <properties>
+                <target.main.class>org.apache.camel.example.kafka.MessageConsumerClient</target.main.class>
+            </properties>
+        </profile>
+
+    </profiles>
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <route>
+            <from uri="direct:in"/>
+            <marshal>
+                <avro instanceClass="org.apache.camel.dataformat.avro.Message"/>
+            </marshal>
+            <to uri="log:out"/>
+        </route>
+    </camelContext>
 </project>

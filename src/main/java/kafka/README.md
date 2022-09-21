@@ -22,7 +22,7 @@ For every utility the first parameter is configMap. The config map can contain a
         kafkaConfig.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 ```
 
-### Example configuration map for consumer:
+### Example configuration map for producer:
 
 ```
         //collection of config properties
@@ -36,5 +36,6 @@ For every utility the first parameter is configMap. The config map can contain a
 
 ## Utility Feature List
 
-Automatic Batching based on inputted message type (list vs dict)
+Automatic Batching based on inputted message type
+
 Kafka callbacks
