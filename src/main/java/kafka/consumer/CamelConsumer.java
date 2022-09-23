@@ -19,7 +19,7 @@ public final class CamelConsumer {
                 .register(camelContext, "kafka");
     }
 
-    public static void startCamel(String fromURI, String routeId) {
+    public static void startCamel( String fromURI, String routeId) {
         CamelContext camelContext = new DefaultCamelContext();
         LOG.info("starting route:");
         camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
@@ -28,15 +28,14 @@ public final class CamelConsumer {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
                 public void configure() throws Exception {
-                    if(fromURI.isEmpty() && routeId.isEmpty()){
-                        from("kafka:{{consumer.topic}}\"\n" +
-                                "                + \"?maxPollRecords={{consumer.maxPollRecords}}\"\n" +
-                                "                + \"&consumersCount={{consumer.consumersCount}}\"\n" +
-                                "                + \"&seekTo={{consumer.seekTo}}\"\n" +
-                                "                + \"&groupId={{consumer.group}}")
-                                .routeId("FromKafka")
-                                .log("${body}");
-                    }else {
+                    from("kafka:{{consumer.topic}}"
+                            + "?maxPollRecords={{consumer.maxPollRecords}}"
+                            + "&consumersCount={{consumer.consumersCount}}"
+                            + "&seekTo={{consumer.seekTo}}"
+                            + "&groupId={{consumer.group}}")
+                            .routeId("FromKafka")
+                            .log("${body}");
+                    if(fromURI != null && routeId != null){
                         from(fromURI)
                                 .routeId(routeId)
                                 .log("${body}");

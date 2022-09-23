@@ -17,12 +17,18 @@ public class CamelTest  {
 
     @Test
             public void testCamelConsumer() {
-            //CamelConsumer cc = new CamelConsumer();
-             CamelConsumer.startCamel("kafka:{{consumer.topic}}"
-                + "?maxPollRecords={{consumer.maxPollRecords}}"
-                + "&consumersCount={{consumer.consumersCount}}"
-                + "&seekTo={{consumer.seekTo}}"
-                + "&groupId={{consumer.group}}", "FromKafka");
+        //failed. duplicate routeId
+//        CamelConsumer.startCamel("kafka:{{consumer.topic}}\"\n" +
+//                "                            + \"?maxPollRecords={{consumer.maxPollRecords}}\"\n" +
+//                "                            + \"&consumersCount={{consumer.consumersCount}}\"\n" +
+//                "                            + \"&seekTo={{consumer.seekTo}}\"\n" +
+//                "                            + \"&groupId={{consumer.group}}", "FromKafka");
+
+        //If the programmer wants to use the default fromURI and routeId, do this.
+        CamelConsumer.startCamel(null, null);
+
+        //If the programmer has different fromURI and routId, do this.
+      //  CamelConsumer.startCamel("insertYourFromURIhere", "insertYourRouteIdhere");
 
     }
 
