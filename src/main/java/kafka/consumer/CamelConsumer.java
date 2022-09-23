@@ -19,46 +19,38 @@ public final class CamelConsumer {
                 .register(camelContext, "kafka");
     }
 
-    public static RouteBuilder createRouteBuilder() {
-        return new RouteBuilder() {
-            public void configure() {
-
-
-                    from("kafka:{{consumer.topic}}"
-                            + "?maxPollRecords={{consumer.maxPollRecords}}"
-                            + "&consumersCount={{consumer.consumersCount}}"
-                            + "&seekTo={{consumer.seekTo}}"
-                            + "&groupId={{consumer.group}}"
-                    )
-
-
-
-//                from("kafka:test?brokers=localhost:9092")
-//                                .log("Message received from Kafka : ${body}")
-//                                .log("    on the topic ${headers[kafka.TOPIC]}")
-//                                .log("    on the partition ${headers[kafka.PARTITION]}")
-//                                .log("    with the offset ${headers[kafka.OFFSET]}")
-//                                .log("    with the key ${headers[kafka.KEY]}")
-                                .routeId("FromKafka")
-                        .log("${body}");
-            }
-        };
-    }
-    public static void main(String[]args) throws Exception {
-   // public static void startCamel(){
+    public static void startCamel(String fromURI, String routeId) {
         CamelContext camelContext = new DefaultCamelContext();
         LOG.info("starting route:");
         camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
         setUpKafkaComponent(camelContext);
-        camelContext.addRoutes(createRouteBuilder());
+        try {
+            camelContext.addRoutes(new RouteBuilder() {
+                @Override
+                public void configure() throws Exception {
+                    if(fromURI.isEmpty() && routeId.isEmpty()){
+                        from("kafka:{{consumer.topic}}\"\n" +
+                                "                + \"?maxPollRecords={{consumer.maxPollRecords}}\"\n" +
+                                "                + \"&consumersCount={{consumer.consumersCount}}\"\n" +
+                                "                + \"&seekTo={{consumer.seekTo}}\"\n" +
+                                "                + \"&groupId={{consumer.group}}")
+                                .routeId("FromKafka")
+                                .log("${body}");
+                    }else {
+                        from(fromURI)
+                                .routeId(routeId)
+                                .log("${body}");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         camelContext.start();
-        Thread.sleep(5L * 60 * 1000);
-   // }
-
-
-
-
-
+        try {
+            Thread.sleep(90000000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
-
 }
