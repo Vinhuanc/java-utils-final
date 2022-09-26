@@ -71,3 +71,6 @@ How to use the Avro Consumer:
 reusableAvroConsumer.consume(configMap, "topicTest","http://localhost:8081");
 ```
 
+
+##Camel Configuration
+Camel configuration takes in 

@@ -62,7 +62,7 @@ How to use the Avro Consumer:
             configMap.put("schema.registry.url", "http://localhost:8081");
             configMap.put(ConsumerConfig.GROUP_ID_CONFIG, "group1");
             
-      Additional Notes: the above configuration map is an example, adjust the configurations according to your kafka topic.
+    //  Additional Notes: the above configuration map is an example, adjust the configurations according to your kafka topic.
 ```
 
 2) Create the avroConsumer class as an object.
@@ -77,3 +77,42 @@ How to use the Avro Consumer:
 reusableAvroConsumer.consume(configMap, "topicTest","http://localhost:8081");
 ```
 
+
+##Camel Configuration
+
+###Camel Consumer:
+How to use the Camel Consumer:
+1) Code kafka configurations in application.properties file. Within the application.properties file, declare a kafka broker, schema registry URL, topic name, and group id.
+
+   Example application.properties file:
+``` java
+kafka.brokers=localhost:9092         //insert your kafka broker here
+schema.registry.url = http://localhost:8081      //insert your schema registry URL here
+
+//camel consumer configurations
+consumer.topic=topicTest            //insert your topic name here
+consumer.group=group1               //insert your group id here
+consumer.maxPollRecords=5000
+consumer.consumersCount=1
+key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+consumer.seekTo=beginning
+``` 
+2) Get more information about the route builder.
+
+   - If user want to use the default route builder. Do nothing.
+
+   - If user want to use a customized route builder, get the from URI and route id endpoints from the producer.
+
+
+3) Call the startCamel method.
+    - if using the default route builder, do this:
+``` java  
+         CamelConsumer.startCamel(null, null);
+```
+- if using a customized route builder, insert fromURI and routeId as parameters.
+
+    Example:
+ ``` java
+        CamelConsumer.startCamel("Kafka1", "route1");
+``` 
