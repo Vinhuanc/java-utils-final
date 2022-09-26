@@ -1,0 +1,8 @@
+apiVersion: v1
+metadata:
+  askId: UHGWM110-027066
+  caAgileId: poc
+  projectKey: com.optum.optum-clinical-gateway:java-utils
+  projectFriendlyName: com.optum.optum-clinical-gateway:java-utils
+  componentType: code
+  targetQG: GATE_00

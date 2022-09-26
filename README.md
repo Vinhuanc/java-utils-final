@@ -47,6 +47,7 @@ Automatic Batching based on inputted message type
 Kafka callbacks
 ~~~~~~~~
 
+<<<<<<< HEAD
 ##Avro Configuration
 Avro Configuration takes in a configuration map, schema registry URL, schema, and topic name.
 
@@ -56,12 +57,20 @@ How to use the Avro Consumer:
 
    Example configuration map:
 ``` java
+=======
+<h3> How to use Avro Consumer </h3>
+
+The avroConsumer method takes in a configuration map, topic name, and schema URL. To use the schema method, do this: <br>
+1. <strong>Make a configuration map. Within the configuration map, declare a bootstrap server, client id, schema registry URl, and group id.</strong> <br>
+   example:  <br>
+>>>>>>> f6a98ab74a703d223c84c21e3dfafa6788337ee8
             Map<String, String> configMap = new HashMap<>();
             configMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
             configMap.put(ConsumerConfig.CLIENT_ID_CONFIG, "test");
             configMap.put("schema.registry.url", "http://localhost:8081");
             configMap.put(ConsumerConfig.GROUP_ID_CONFIG, "group1");
             
+<<<<<<< HEAD
     //  Additional Notes: the above configuration map is an example, adjust the configurations according to your kafka topic.
 ```
 
