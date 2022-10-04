@@ -12,6 +12,7 @@ import org.apache.camel.component.kafka.KafkaConstants;
 import org.apache.camel.dataformat.avro.AvroDataFormat;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.model.RouteDefinition;
+import org.apache.kafka.common.metrics.stats.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //SchemaReader()
@@ -45,15 +46,20 @@ public  class CamelProducer {
             e.printStackTrace();
         }
         AvroDataFormat format = new AvroDataFormat(schema);
+
         try {
             camelContext.addRoutes((new RouteBuilder() {
                 @Override
                 public void configure() throws Exception {
                     from("direct:kafkaStart")
-                        //    .marshal(format)
-                            .routeId("DirectToKafka")
-                            .to("kafka:{{producer.topic}}").log("${headers}");
+                         //   .marshal(format)
 
+                            .routeId("DirectToKafka")
+                            .to("kafka:{{producer.topic}}")
+                            .log("${headers}");
+                    from("direct:in")
+                            .marshal(format)
+                            .to("direct:marshal");
                 }
             }));
         } catch (Exception e) {
@@ -66,7 +72,7 @@ public  class CamelProducer {
 
             headers.put(KafkaConstants.PARTITION_KEY, 0);
             headers.put(KafkaConstants.KEY, "1");
-            producerTemplate.sendBodyAndHeaders("direct:kafkaStart", "its 1:42pm", headers);
+            producerTemplate.sendBodyAndHeaders("direct:kafkaStart", "its 2:07pm", headers);
 
 
 

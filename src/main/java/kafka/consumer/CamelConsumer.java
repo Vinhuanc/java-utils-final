@@ -1,13 +1,19 @@
 package kafka.consumer;
+import org.apache.avro.Schema;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.component.ComponentsBuilderFactory;
+import org.apache.camel.dataformat.avro.AvroDataFormat;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.camel.spi.*;
 import org.apache.camel.util.concurrent.NamedThreadLocal;
+
+import java.io.File;
+import java.io.IOException;
+
 public final class CamelConsumer {
     public static final Logger LOG = LoggerFactory.getLogger(CamelConsumer.class);
     public CamelConsumer(){}
@@ -25,6 +31,13 @@ public final class CamelConsumer {
         LOG.info("starting route:");
         camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
         setUpKafkaComponent(camelContext);
+        Schema schema = null;
+        try {
+            schema = new Schema.Parser().parse(new File("src/main/resources/schema/student.avsc"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        AvroDataFormat format = new AvroDataFormat(schema);
         try {
             camelContext.addRoutes(new RouteBuilder() {
                 @Override
@@ -36,6 +49,11 @@ public final class CamelConsumer {
                             + "&groupId={{consumer.group}}")
                             .routeId("FromKafka")
                             .log("${body}");
+                    ;
+                    from("direct:in")
+                            .marshal(format)
+                            .to("direct:marshal");
+
 
                 }
             });
