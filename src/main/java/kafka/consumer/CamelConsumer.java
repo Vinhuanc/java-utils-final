@@ -19,7 +19,38 @@ public final class CamelConsumer {
                 .register(camelContext, "kafka");
     }
 
-    public static void startCamel( String fromURI, String routeId) {
+    //default camel consumer
+    public static void camelDefaultReceive() {
+        CamelContext camelContext = new DefaultCamelContext();
+        LOG.info("starting route:");
+        camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
+        setUpKafkaComponent(camelContext);
+        try {
+            camelContext.addRoutes(new RouteBuilder() {
+                @Override
+                public void configure() throws Exception {
+                    from("kafka:{{consumer.topic}}"
+                            + "?maxPollRecords={{consumer.maxPollRecords}}"
+                            + "&consumersCount={{consumer.consumersCount}}"
+                            + "&seekTo={{consumer.seekTo}}"
+                            + "&groupId={{consumer.group}}")
+                            .routeId("FromKafka")
+                            .log("${body}");
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        camelContext.start();
+        try {
+            Thread.sleep(90000000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void camelReceive( String fromURI, String routeId) {
         CamelContext camelContext = new DefaultCamelContext();
         LOG.info("starting route:");
         camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
