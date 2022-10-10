@@ -3,6 +3,7 @@ package kafka;
 import kafka.consumer.CamelConsumer;
 import kafka.producer.CamelProducer;
 import org.apache.camel.CamelContext;
+import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.component.ComponentsBuilderFactory;
@@ -32,6 +33,21 @@ public class CamelTest  {
   //  }
 public static void main(String[]args){
    // CamelConsumer.camelReceive("direct:kafkaStart","FirectToKafka" );
-    CamelProducer.camelDefaultProduce();
+ //  CamelProducer.testSendToSpecificUri();
+    CamelContext camel = new DefaultCamelContext();
+    camel.start();
+    ConsumerTemplate consumer = camel.createConsumerTemplate();
+    String message= consumer.receiveBody("direct:basic", String.class);
+    System.out.print(message);
+
+ //  CamelConsumer.camelCustomeReceive("direct:out");
 }
+
+//this one works?! result: Subscribing topicTest
+//    @Test
+//    public void testcamelDefaultReceive(){
+//        CamelConsumer.camelDefaultKafkaReceive();
+//    }
+
+
 }

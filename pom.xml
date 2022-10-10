@@ -12,39 +12,79 @@
             <id>confluent</id>
             <url>https://packages.confluent.io/maven/</url>
         </repository>
+
     </repositories>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <source>16</source>-->
+<!--                    <target>16</target>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.avro</groupId>-->
+<!--                <artifactId>avro-maven-plugin</artifactId>-->
+<!--                <version>1.9.2</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>generate-sources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>schema</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>-->
+<!--                            <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
+<!--&lt;!&ndash;            <plugin>&ndash;&gt;-->
+<!--&lt;!&ndash;                <groupId>io.confluent</groupId>&ndash;&gt;-->
+<!--&lt;!&ndash;                <artifactId>kafka-schema-registry-maven-plugin</artifactId>&ndash;&gt;-->
+<!--&lt;!&ndash;                <version>${confluent.version}</version>&ndash;&gt;-->
+<!--&lt;!&ndash;                <configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <schemaRegistryUrls>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <param>http://localhost:8081</param>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </schemaRegistryUrls>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <subjects>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <transactions-value>/Users/hchen24/java-utils/src/main/java/kafka/schema/student.avsc&ndash;&gt;-->
+<!--&lt;!&ndash;                        </transactions-value>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </subjects>&ndash;&gt;-->
+<!--&lt;!&ndash;                </configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;                <goals>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <goal>test-compatibility</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;                </goals>&ndash;&gt;-->
+<!--&lt;!&ndash;            </plugin>&ndash;&gt;-->
+<!--        </plugins>-->
+<!--    </build>-->
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>16</source>
-                    <target>16</target>
-                </configuration>
-            </plugin>
-
-
-<!--            <plugin>-->
-<!--                <groupId>io.confluent</groupId>-->
-<!--                <artifactId>kafka-schema-registry-maven-plugin</artifactId>-->
-<!--                <version>${confluent.version}</version>-->
-<!--                <configuration>-->
-<!--                    <schemaRegistryUrls>-->
-<!--                        <param>http://localhost:8081</param>-->
-<!--                    </schemaRegistryUrls>-->
-<!--                    <subjects>-->
-<!--                        <transactions-value>/Users/hchen24/java-utils/src/main/java/kafka/schema/student.avsc-->
-<!--                        </transactions-value>-->
-<!--                    </subjects>-->
-<!--                </configuration>-->
-<!--                <goals>-->
-<!--                    <goal>test-compatibility</goal>-->
-<!--                </goals>-->
-<!--            </plugin>-->
+            <!--plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <version>${avro-version}</version>
+                <executions>
+                    <execution>
+                        <id>schemas</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                            <goal>protocol</goal>
+                            <goal>idl-protocol</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/test/avro/</sourceDirectory>
+                            <outputDirectory>${project.basedir}/src/test/java/</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin-->
         </plugins>
     </build>
-
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
         <dependency>
@@ -61,6 +101,13 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-util</artifactId>
             <version>3.18.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.camel/camel-jetty -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jetty</artifactId>
+            <version>3.19.0</version>
+            <scope>test</scope>
         </dependency>
 
 
@@ -124,6 +171,16 @@
             <version>1.11.1</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>RELEASE</version>
@@ -158,11 +215,25 @@
 <!--            <artifactId>camel-http-starter</artifactId>-->
 <!--            <version>2.25.4</version>-->
 <!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.apache.camel/camel-component -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-component</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stream</artifactId>
             <version>3.18.2</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.camel/camel-direct -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-direct</artifactId>
+            <version>3.18.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-componentdsl</artifactId>
@@ -205,6 +276,12 @@
             <version>3.19.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-avro-starter</artifactId>
+            <version>3.18.2</version>
+            <!-- use the same version as your Camel core version -->
+        </dependency>
     </dependencies>
 
     <properties>
@@ -228,13 +305,40 @@
         </profile>
 
     </profiles>
-<!--    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">-->
+<!--    <beans xmlns="http://www.springframework.org/schema/beans"-->
+<!--           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--           xsi:schemaLocation="-->
+<!--       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd-->
+<!--       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">-->
+<!--    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"-->
+<!--                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--                  xsi:schemaLocation="http://camel.apache.org/schema/spring ">-->
+<!--        <dataFormats>-->
+<!--            <avro id="avro1" instanceClassName="org.apache.camel.dataformat.avro.example.Value"/>-->
+<!--        </dataFormats>-->
+<!--        &lt;!&ndash;        <route>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <from uri="direct:in"/>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <marshal ref="avro"/>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <to uri="log:out"/>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </route>&ndash;&gt;-->
 <!--        <route>-->
 <!--            <from uri="direct:in"/>-->
 <!--            <marshal>-->
-<!--                <avro instanceClass="org.apache.camel.dataformat.avro.Message"/>-->
+<!--                <avro instanceClassName="org.apache.camel.dataformat.avro.example.Value"/>-->
 <!--            </marshal>-->
-<!--            <to uri="log:out"/>-->
+<!--        </route>-->
+<!--        <route>-->
+<!--            <from uri="direct:back"/>-->
+<!--            <unmarshal>-->
+<!--                <avro instanceClassName="org.apache.camel.dataformat.avro.example.Value"/>-->
+<!--            </unmarshal>-->
+<!--            <to uri="mock:reverse"/>-->
 <!--        </route>-->
 <!--    </camelContext>-->
+<!--        <bean id="avro2" class="org.apache.camel.dataformat.avro.AvroDataFormat">-->
+<!--            <property name="instanceClassName" value="org.apache.camel.dataformat.avro.example.Value"/>-->
+<!--        </bean>-->
+
+<!--    </beans>-->
+
 </project>

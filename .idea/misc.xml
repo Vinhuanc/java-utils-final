@@ -8,6 +8,9 @@
       </list>
     </option>
   </component>
+  <component name="ProjectResources">
+    <resource url="http://camel.apache.org/schema/spring" location="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="openjdk-18" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
