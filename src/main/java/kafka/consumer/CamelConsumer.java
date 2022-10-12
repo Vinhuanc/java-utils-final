@@ -1,9 +1,10 @@
 package kafka.consumer;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
+//KafkaAvroDeserializerConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.avro.Schema;
+import org.apache.camel.ConsumerTemplate;
 import org.apache.camel.Endpoint;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -121,10 +122,13 @@ public final class CamelConsumer {
 //        props.put("key.converter.schema.registry.url", "http://localhost:8081");
 //        props.put("value.converter.schema.registry.url", "http://localhost:8081");
         CamelContext camelContext = new DefaultCamelContext();
+        LOG.info("starting route:");
+        camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
+        setUpKafkaComponent(camelContext);
      try {
          camelContext.addRoutes(new RouteBuilder() {
              public void configure() throws Exception {
-                 camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
+
                  log.info("About to start route: Kafka Server -> Log ");
                  from("kafka:{{consumer.topic}}?brokers=localhost:9092"
                          + "&maxPollRecords={{consumer.maxPollRecords}}"
@@ -135,28 +139,35 @@ public final class CamelConsumer {
                                  //           + "keyDeserializer=" + StringDeserializer.class.getName()
                        //          + "valueDeserializer=" + StringDeserializer.class.getName()
                   //              + "valueDeserializer=#kafkaHeaderDeserializerCustom"
-                 //        + "&schemaRegistryURL={{http://localhost:8081}}"
-             //                    + "headerDeserializer=#kafkaHeaderDeserializerCustom"
+                                     + "&schemaRegistryURL={{schemaRegistryURL}}"
+                 //                + "headerDeserializer=#kafkaHeaderDeserializerCustom"
                          //    + "&kafkaHeaderDeserializer=#kafkaHeaderDeserializerCustom"
                       //   + "&key.converter.schema.registry.url={{"
 //                         + "&keyDeserializer=" + StringDeserializer.class.getName()
                    //      + "valueDeserializer=" + StringDeserializer.class
-                                 + "valueDeserializer=" + KafkaAvroDeserializer.class
+                                 + "&keyDeserializer=" +  KafkaAvroDeserializer.class.getName()
+                                 + "&valueDeserializer=" +  KafkaAvroDeserializer.class.getName()
+                            //     + "&valueDeserializer="
                  )
+                   //      .convertBodyTo(String.class)
                          .routeId("DirectToKafka")
                     //good     .routeId("FromKafka")
                       //   .log("${headers}");
                       //   .log("${headers.values()}");
                         // .log("${values}");
-                         .log("${headers}");
+                         .log("Message received from Kafka : ${body}")
+                         .log("${headers}")
+                   .log("    with the key ${headers[kafka.KEY]}")
+                         .log("    with the key ${headers[kafka.VALUE]}");
+;
              }
          });
      } catch (Exception e) {
          e.printStackTrace();
      }
      camelContext.start();
-    //    String value = new String(headers.value(), StandardCharsets.UTF_8);
-  //   System.out.print("*******" + value "*********");
+        ConsumerTemplate consumerTemplate = camelContext.createConsumerTemplate();
+   //  String messsage = consumerTemplate.receiveBody("kafka:{{consumer.topic}}",30 * 60 * 1000 );
      try {
          Thread.sleep(30 * 60 * 1000);
      } catch (InterruptedException e) {
