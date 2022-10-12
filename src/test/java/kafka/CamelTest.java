@@ -15,39 +15,37 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import kafka.consumer.CamelConsumer.*;
 import static kafka.consumer.CamelConsumer.*;
-public class CamelTest  {
+public class CamelTest {
     public static final Logger LOG = LoggerFactory.getLogger(CamelTest.class);
 
 //    @Test
 //            public void testCamelConsumer() {
-        //If the programmer wants to use the default fromURI and routeId, do this.
-       // camelReceive(null, null);
-     //   CamelConsumer.camelDefaultReceive();
+    //If the programmer wants to use the default fromURI and routeId, do this.
+    // camelReceive(null, null);
+    //   CamelConsumer.camelDefaultReceive();
 
-        //If the programmer has different fromURI and routId, do this.
-        //CamelConsumer.startCamel("insertYourFromURIhere", "insertYourRouteIdhere");
-
-
+    //If the programmer has different fromURI and routId, do this.
+    //CamelConsumer.startCamel("insertYourFromURIhere", "insertYourRouteIdhere");
 
 
-  //  }
-public static void main(String[]args){
-   // CamelConsumer.camelReceive("direct:kafkaStart","FirectToKafka" );
- //  CamelProducer.testSendToSpecificUri();
-    CamelContext camel = new DefaultCamelContext();
-    camel.start();
-    ConsumerTemplate consumer = camel.createConsumerTemplate();
-    String message= consumer.receiveBody("direct:basic", String.class);
-    System.out.print(message);
+    //  }
+//public static void main(String[]args){
+    // CamelConsumer.camelReceive("direct:kafkaStart","FirectToKafka" );
+    //  CamelProducer.testSendToSpecificUri();
 
- //  CamelConsumer.camelCustomeReceive("direct:out");
-}
 
-//this one works?! result: Subscribing topicTest
+    //  CamelConsumer.camelCustomeReceive("direct:out");
+//}
+
+    //this one works?! result: Subscribing topicTest
 //    @Test
 //    public void testcamelDefaultReceive(){
 //        CamelConsumer.camelDefaultKafkaReceive();
 //    }
+    @Test
+    public void testCamelDefaultKafkaReceive() {
+        CamelConsumer.camelDefaultKafkaReceive();
 
-
+    }
 }
+//}

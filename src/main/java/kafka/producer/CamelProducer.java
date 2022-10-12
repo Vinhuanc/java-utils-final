@@ -1,5 +1,6 @@
 package kafka.producer;
 
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import kafka.consumer.CamelConsumer;
 import org.apache.avro.Schema;
 import org.apache.camel.*;
@@ -10,12 +11,15 @@ import org.apache.camel.dataformat.avro.AvroDataFormat;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JacksonXMLDataFormat;
+import org.apache.kafka.common.header.internals.RecordHeaders;
 import org.apache.kafka.common.metrics.stats.Value;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //SchemaReader()
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,8 +37,8 @@ public  class CamelProducer {
                 .brokers("{{kafka.brokers}}")
                 .register(camelContext, "kafka");
     }
-
-    public static void camelDefaultProduce() {
+public static void main(String[] args) {
+  //  public static void camelDefaultProduce() {
         CamelContext camelContext = new DefaultCamelContext();
         LOG.info("starting route:");
         camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
@@ -45,32 +49,21 @@ public  class CamelProducer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //   AvroDataFormat format = new AvroDataFormat(finalSchema);
-
         try {
             Schema finalSchema = schema;
-
             camelContext.addRoutes((new RouteBuilder() {
                 @Override
                 public void configure() throws Exception {
                     AvroDataFormat format = new AvroDataFormat(finalSchema);
                     //    JacksonDataFormat format2 = new JacksonDataFormat(CamelProducer.class);
-                    from("direct:kafkaStart")
-                            //      .marshal(format)
-                            //           .marshal(format)
-                            //     .routeId("DirectToKafka")
-                            .to("direct:kafkaStart")
-                            .log("Today its 10/6/22 its 10:46am");
-
-//                    from("direct:in")
-//                            .marshal(format)
-//                            .to("direct:marshal");
-                    //this oen works with the consumer
-//                    from("direct:in")
-//                            .marshal(format)
-//                            .to("direct:marshal");
-
-
+                    from("direct:kafkaStart"
+                       //     + "&keySerializer=" + StringSerializer.class.getName()
+                       //     + "&valueSerializer=" + StringSerializer.class.getName()
+                                 )
+                            .routeId("DirectToKafka")
+                            .to("kafka:{{producer.topic}}")
+                            .log("${headers}")
+                    ;
                 }
             }));
         } catch (Exception e) {
@@ -79,96 +72,37 @@ public  class CamelProducer {
         try {
             ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
             camelContext.start();
-            System.out.print("Does the code stop here? or even get to his point?");
-         //   Map<String, Object> headers = new HashMap<>();
 
-            //  headers.put(KafkaConstants.PARTITION_KEY, 0);
-            //   headers.put(KafkaConstants.KEY, "1");
-            //    producerTemplate.sendBodyAndHeaders("direct:kafkaStart",""name", "eli"" , headers);
-//            headers.put("name", "eli");
-//            headers.put("major", "Aerospace Engineering");
-//            headers.put("aerospace", "amx");
-//            headers.put("name", "eli2");
-//            headers.put("major", "Aerospace Engineering2");
-//            headers.put("major", "Aerospace Engineering3");
-//            headers.put("name", "eli3");
-            //          producerTemplate.sendBodyAndHeaders("direct:kafkaStart", headers );
-//producerTemplate.sendBody("direct:kafkaStart", headers); //returns INFO FromKafka - {major=Aerospace Engineering, name=eli}
-            //   producerTemplate.sendBodyAndHeaders("direct:kafkaStart", headers.get("name") , headers);
-            //    producerTemplate.sendBodyAndHeader("direct:kafkaStart", headers.);
-            //          producerTemplate.send
-                 producerTemplate.sendBody("direct:kafkaStart", "Today is 10/6/22");
-            LOG.info("Successfully published event to Kafka.");
+            Map<String, Object> headers = new HashMap<>();
+            headers.put("name", "sydney");
+            headers.put("major", "BUsiness Adminsitartion");
+
+//            headers.put("problem1", "xyz");
+//            headers.put("problem2", "");
+//            headers.put("problem3", "aaa");
+//            headers.values().toString();
+        //    byte[] bytes = headers.values().getBytes(StandardCharsets.UTF_8);
+
+       //     String s = new String(headers.values(), StandardCharsets.UTF_8);
+          //  headers.put("major", "AerospaceEngineering");
+     //       producerTemplate.sendBodyAndHeader("kafka:{{producer.topic}}", "Hello? its 12:26pm", "name", "eli");
+producerTemplate.sendBodyAndHeaders("kafka:{{producer.topic}}", "hello there", headers);
+  //producerTemplate.sendBodyAndHeaders("kafka:{{producer.topic}}", headers);
+ // producerTemplate.sendBodyAndHeaders("kafka:{{producer.topic}}", "headers", headers);
+
+          //  LOG.info("Successfully published event to Kafka.");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         try {
             Thread.sleep(5L * 60 * 1000);
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-
-    public static void testSendToSpecificUri() {
-        CamelContext camelContext = new DefaultCamelContext();
-        LOG.info("starting route:");
-        //missing application.properties
-        //  setUpKafkaComponent(camelContext);
-        try {
-            camelContext.addRoutes((new RouteBuilder() {
-                @Override
-                public void configure() throws Exception {
-
-                    from("direct:in")
-
-                            .to("direct:kafkaStart")
-                            .log("Today is 10/6/22");
-                }
-            }));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-//    try {
-//        ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
-//        camelContext.start();
-//        producerTemplate.sendBody("direct:kafkaStart", "Today is 10/6/22");
-//        LOG.info("Successfully published event to Kafka.");
-//    }catch (Exception e) {
-//        e.printStackTrace();
-//    }
-
-
-//    try {
-//        Thread.sleep(5L * 60 * 1000);
-//
-//    } catch (InterruptedException e) {
-//        e.printStackTrace();
-//    }
-//    }
-    }
-        public static void tryThis(){
-        //    Exchange exchange = new Exchange();
-            CamelContext camelContext = new DefaultCamelContext();
-            ProducerTemplate template = camelContext.createProducerTemplate();
-
-// send to default endpoint
-     //       template.sendBody("<hello>world!</hello>");
-
-// send to a specific queue
-     //       template.sendBody("test1", "<hello>world!</hello>");
-template.sendBody("test1", "Hello please work right now mfffff");
-// send with a body and header
-//            template.sendBodyAndHeader("activemq:MyQueue",
-//                    "<hello>world!</hello>",
-//                    "CustomerRating", "Gold");
-        }
-
-
-
 }
+
+// }
 
 //    void sendBody(Endpoint endpoint, Object body) throws CamelExecutionException;
 //
