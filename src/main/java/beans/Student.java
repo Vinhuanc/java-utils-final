@@ -1,5 +1,8 @@
 package beans;
 
+import lombok.Builder;
+
+@Builder
 public class Student {
     private String Name;
     private String major;

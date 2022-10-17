@@ -66,12 +66,14 @@ public static void main(String[] args) throws Exception {
               //      AvroDataFormat format = new AvroDataFormat(finalSchema);
                     //    JacksonDataFormat format2 = new JacksonDataFormat(CamelProducer.class);
                     from("direct:kafkaStart")
-                            .process(new MapToGenericRecord())
-                            .log("${body}")
+                         //   .process(new MapToGenericRecord())
+                            .setBody(constant("Hi This is Avro example"))
+                            .process(new KafkaAvroMessageProcessor())
+                          //  .log("${body}")
 //                            .marshal().jaxb()
 
-                            .to("kafka:{{producer.topic}}?brokers={{kafka.brokers}}&clientId={{producer.clientId}}&valueSerializer={{value.serializer}}&schemaRegistryURL={{schema.registry.url}}&specificAvroReader=true")
-                            .log("${body}");
+                            .to("kafka:{{producer.topic}}?brokers={{kafka.brokers}}&clientId={{producer.clientId}}&valueSerializer={{value.serializer}}&schemaRegistryURL={{schema.registry.url}}&specificAvroReader=true");
+                       //     .log("${body}");
                 }
             }));
 
