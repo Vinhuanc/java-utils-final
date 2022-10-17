@@ -1,5 +1,8 @@
 package kafka.producer;
 
+import beans.Student;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import kafka.consumer.CamelConsumer;
@@ -20,15 +23,15 @@ import org.apache.kafka.common.metrics.stats.Value;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//SchemaReader()
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import processor.MapToGenericRecord;
+
 public  class CamelProducer {
     public static final Logger LOG = LoggerFactory.getLogger(CamelProducer.class);
 
@@ -43,50 +46,46 @@ public  class CamelProducer {
                 .brokers("{{kafka.brokers}}")
                 .register(camelContext, "kafka");
     }
-public static void main(String[] args) {
+public static void main(String[] args) throws Exception {
   //  public static void camelDefaultProduce() {
         CamelContext camelContext = new DefaultCamelContext();
         LOG.info("starting route:");
-    Properties props = new Properties();
-  //  producerConfig
         camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
-        setUpKafkaComponent(camelContext);
+
 //        Schema schema = null;
 //        try {
 //            schema = new Schema.Parser().parse(new File("src/main/resources/schema/student.avsc"));
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        try {
+
        //     Schema finalSchema = schema;
             camelContext.addRoutes((new RouteBuilder() {
                 @Override
                 public void configure() throws Exception {
               //      AvroDataFormat format = new AvroDataFormat(finalSchema);
                     //    JacksonDataFormat format2 = new JacksonDataFormat(CamelProducer.class);
-                    from("direct:kafkaStart"
-                           + "&keySerializer=" + KafkaAvroSerializer.class.getName()
-                           + "&valueSerializer=" + KafkaAvroSerializer.class.getName()
-                     //            + "valueSerializer=" + KafkaAvroSerializer.class.getName()
-                      //      + "&valueSerializer={{value.serializer}}"
-                      //              + "&valueSerializer=" + KafkaAvroSerializer.class.getName()
-                                 )
-                            .routeId("DirectToKafka")
-                            .to("kafka:{{producer.topic}}")
-                            .log("${headers}")
-                    ;
+                    from("direct:kafkaStart")
+                            .process(new MapToGenericRecord())
+                            .log("${body}")
+//                            .marshal().jaxb()
+
+                            .to("kafka:{{producer.topic}}?brokers={{kafka.brokers}}&clientId={{producer.clientId}}&valueSerializer={{value.serializer}}&schemaRegistryURL={{schema.registry.url}}&specificAvroReader=true")
+                            .log("${body}");
                 }
             }));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
 
             camelContext.start();
             ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
-            Map<String, Object> headers = new HashMap<>();
-            headers.put("name", "sydney");
-            headers.put("major", "BUsiness Adminsitartion");
+            Student testStudent= new Student();
+            testStudent.setMajor("biology");
+            testStudent.setName("Groot56");
+    Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+    gson.toJson(testStudent);
+            Endpoint endpoint = camelContext.getEndpoint("direct:kafkaStart");
+            producerTemplate.setDefaultEndpoint(endpoint);
+            producerTemplate.sendBody(testStudent);
+            LOG.info("Successfully published event to Kafka.");
        //     GenericRecord recordBuilter = new GenericRecord();
 //            Schema.Parser parser = new Schema.Parser();
 //
@@ -95,38 +94,55 @@ public static void main(String[] args) {
 //            recordBuilter.set("name", "emma");
 //            recordBuilter.set("major", "economics admisntiona");
 
+            Thread.sleep(10L * 60 * 1000);
 
-//            headers.put("problem1", "xyz");
-//            headers.put("problem2", "");
-//            headers.put("problem3", "aaa");
-//            headers.values().toString();
-         //   byte[] bytes = headers.values().getBytes(StandardCharsets.UTF_8);
+    }}
 
-       //     String s = new String(headers.values(), StandardCharsets.UTF_8);
-          //  headers.put("major", "AerospaceEngineering");
-     //       producerTemplate.sendBodyAndHeader("kafka:{{producer.topic}}", "Hello? its 12:26pm", "name", "eli");
-//producerTemplate.sendBodyAndHeaders("kafka:{{producer.topic}}", headers, headers);
-//producerTemplate.sendBody("kafka:{{producer.topic}}", "{\"hello\":\"word\"}");
-  producerTemplate.sendBodyAndHeaders("kafka:{{producer.topic}}", headers,headers);
- // producerTemplate.sendBodyAndHeaders("kafka:{{producer.topic}}", "headers", headers);
 
-          //  LOG.info("Successfully published event to Kafka.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Thread.sleep(5L * 60 * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-// }
-
-//    void sendBody(Endpoint endpoint, Object body) throws CamelExecutionException;
 //
-//    void sendBody(String endpointUri, Object body) throws CamelExecutionException;
-//void sendBodyAndHeaders(String endpointUri, Object body, Map<String, Object> headers) throws CamelExecutionException;
+//String schema = "{\n" +
+//        "  \"type\": \"record\",\n" +
+//        "  \"name\": \"students\",\n" +
+//        "  \"fields\": [\n" +
+//        "    {\n" +
+//        "      \"name\": \"Name\",\n" +
+//        "      \"type\": \"string\"\n" +
+//        "    },\n" +
+//        "    {\n" +
+//        "      \"name\": \"major\",\n" +
+//        "      \"type\": \"string\"\n" +
+//        "    }\n" +
+//        "  ]\n" +
+//        "} "
 //
-//    void sendBodyAndHeaders(Endpoint endpoint, Object body, Map<String, Object> headers) throws CamelExecutionException;
+//        curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+//                --data '{"schema": "{\n" +
+//                "  \"type\": \"record\",\n" +
+//                "  \"name\": \"students\",\n" +
+//                "  \"fields\": [\n" +
+//                "    {\n" +
+//                "      \"name\": \"Name\",\n" +
+//                "      \"type\": \"string\"\n" +
+//                "    },\n" +
+//                "    {\n" +
+//                "      \"name\": \"major\",\n" +
+//                "      \"type\": \"string\"\n" +
+//                "    }\n" +
+//                "  ]\n" +
+//                "} "}' \
+//                http://localhost:8081/subjects/camelTopicTest-value/versions
+//
+//                curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"schema":"{\n" +
+//                "  \"type\": \"record\",\n" +
+//                "  \"name\": \"students\",\n" +
+//                "  \"fields\": [\n" +
+//                "    {\n" +
+//                "      \"name\": \"Name\",\n" +
+//                "      \"type\": \"string\"\n" +
+//                "    },\n" +
+//                "    {\n" +
+//                "      \"name\": \"major\",\n" +
+//                "      \"type\": \"string\"\n" +
+//                "    }\n" +
+//                "  ]\n" +
+//                "} "}' http://localhost:8081/subjects/camelTopicTest-value/versions

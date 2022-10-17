@@ -19,33 +19,11 @@ public class CamelTest {
     public static final Logger LOG = LoggerFactory.getLogger(CamelTest.class);
 
 //    @Test
-//            public void testCamelConsumer() {
-    //If the programmer wants to use the default fromURI and routeId, do this.
-    // camelReceive(null, null);
-    //   CamelConsumer.camelDefaultReceive();
 
-    //If the programmer has different fromURI and routId, do this.
-    //CamelConsumer.startCamel("insertYourFromURIhere", "insertYourRouteIdhere");
-
-
-    //  }
-//public static void main(String[]args){
-    // CamelConsumer.camelReceive("direct:kafkaStart","FirectToKafka" );
-    //  CamelProducer.testSendToSpecificUri();
-
-
-    //  CamelConsumer.camelCustomeReceive("direct:out");
-//}
-
-    //this one works?! result: Subscribing topicTest
-//    @Test
-//    public void testcamelDefaultReceive(){
-//        CamelConsumer.camelDefaultKafkaReceive();
-//    }
-    @Test
-    public void testCamelDefaultKafkaReceive() {
-        CamelConsumer.camelDefaultKafkaReceive();
+  //  @Test
+   // public void testCamelDefaultKafkaReceive() {
+      //  CamelConsumer.camelDefaultKafkaReceive();
 
     }
-}
+//}
 //}
