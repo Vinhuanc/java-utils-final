@@ -116,6 +116,7 @@ value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 2. Call the CamelConsumer.camelConsume() method within your consumer class. 
 <br>
 Note: calling the method will throw an error, click on "add exception to method signature". A InterruptedException and IllegalAccessException will be imported.
+
 ``` java
 public static void main(String [] args) throws InterruptedException, IllegalAccessException {
         CamelConsumer.camelConsume();
