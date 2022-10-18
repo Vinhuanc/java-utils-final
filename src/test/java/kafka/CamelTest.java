@@ -1,6 +1,6 @@
 package kafka;
 
-import beans.Students;
+
 import kafka.consumer.CamelConsumer;
 import kafka.producer.CamelProducer;
 import org.apache.camel.CamelContext;
@@ -28,7 +28,7 @@ public class CamelTest {
     @Test
     public void testCamelProducer() throws Exception {
 
-        CamelProducer.camelProduce();
+      //  CamelProducer.camelProduce();
 //        CamelContext camelContext = new DefaultCamelContext();
 //        Students testStudent= new Students();
 //        testStudent.setMajor("biology");
