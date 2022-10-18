@@ -2,7 +2,7 @@ package beans;
 
 import lombok.Builder;
 
-@Builder
+@Builder(toBuilder = true)
 public class Student {
     private String Name;
     private String major;

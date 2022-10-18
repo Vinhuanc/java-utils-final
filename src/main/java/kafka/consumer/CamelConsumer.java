@@ -183,21 +183,21 @@ public final class CamelConsumer {
 
 
 //for(String message : Student.class.)
-        Student student = new Student();
+//        Student student = new Student();
 //        for (Field field : student.getClass().getDeclaredFields()) {
 //            field.setAccessible(true);
 //            String name = field.getName();
 //            Object value = field.get(student);
 //            String name2 = student.getMajor();
 //            System.out.printf("Field name: %s, Field value: %s%n", name, value);
-        Object someObject = student;
-        for (Field field : someObject.getClass().getDeclaredFields()) {
-            field.setAccessible(true); // You might want to set modifier to public first.
-            Object value = field.get(someObject);
-            if (value != null) {
-                System.out.println(field.getName() + "=" + value);
-            }
-        }
+//        Object someObject = student;
+//        for (Field field : someObject.getClass().getDeclaredFields()) {
+//            field.setAccessible(true); // You might want to set modifier to public first.
+//            Object value = field.get(someObject);
+//            if (value != null) {
+//                System.out.println(field.getName() + "=" + value);
+//            }
+//        }
 //            Consumer<String, GenericRecord> consumer = new KafkaConsumer<>();
 //            ConsumerRecords<String, GenericRecord> records = consumer.poll(100);
 //            for (ConsumerRecord<String, GenericRecord> record : records) {
