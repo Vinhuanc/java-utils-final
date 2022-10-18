@@ -12,8 +12,7 @@ public  class CamelProducer {
     public static final Logger LOG = LoggerFactory.getLogger(CamelProducer.class);
     public CamelProducer() throws IOException {}
 
-public static void main(String[] args) throws Exception {
-  //  public static void camelDefaultProduce() {
+public static void camelProduce() throws Exception {
         CamelContext camelContext = new DefaultCamelContext();
         LOG.info("starting route:");
         camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
@@ -26,15 +25,14 @@ public static void main(String[] args) throws Exception {
                 }
             }));
             camelContext.start();
-                Students testStudent= new Students();
-            testStudent.setMajor("biology");
-            testStudent.setName("Groot56");
+    Students testStudent= new Students();
+    testStudent.setMajor("biology");
+    testStudent.setName("Groot56837837878373788");
     ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
-    producerTemplate.sendBody("kafka:{{producer.topic}}?brokers={{kafka.brokers}}", testStudent);
     Endpoint ep = camelContext.getEndpoint("kafka:{{producer.topic}}?brokers={{kafka.brokers}}");
     producerTemplate.setDefaultEndpoint(ep);
     producerTemplate.sendBody(testStudent);
-            Thread.sleep(10L * 60 * 1000);
 
+    Thread.sleep(10L * 60 * 1000);
     }}
 

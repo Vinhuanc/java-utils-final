@@ -1,9 +1,11 @@
 package kafka;
 
+import beans.Students;
 import kafka.consumer.CamelConsumer;
 import kafka.producer.CamelProducer;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ConsumerTemplate;
+import org.apache.camel.Endpoint;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.component.ComponentsBuilderFactory;
@@ -18,12 +20,22 @@ import static kafka.consumer.CamelConsumer.*;
 public class CamelTest {
     public static final Logger LOG = LoggerFactory.getLogger(CamelTest.class);
 
-//    @Test
-
-  //  @Test
-   // public void testCamelDefaultKafkaReceive() {
-      //  CamelConsumer.camelDefaultKafkaReceive();
-
+    @Test
+    public void testCamelConsumer() throws InterruptedException, IllegalAccessException {
+        CamelConsumer.camelConsume();
     }
-//}
-//}
+
+    @Test
+    public void testCamelProducer() throws Exception {
+
+        CamelProducer.camelProduce();
+//        CamelContext camelContext = new DefaultCamelContext();
+//        Students testStudent= new Students();
+//        testStudent.setMajor("biology");
+//        testStudent.setName("Groot56837837878373788");
+//        ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
+//        Endpoint ep = camelContext.getEndpoint("kafka:{{producer.topic}}?brokers={{kafka.brokers}}");
+//        producerTemplate.setDefaultEndpoint(ep);
+//        producerTemplate.sendBody(testStudent);
+    }
+    }

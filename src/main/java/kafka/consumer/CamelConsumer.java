@@ -11,7 +11,7 @@ public final class CamelConsumer {
     public static final Logger LOG = LoggerFactory.getLogger(CamelConsumer.class);
     public CamelConsumer() { }
 
-    public static void main(String[] args) throws InterruptedException, IllegalAccessException {
+    public static void camelConsume() throws InterruptedException, IllegalAccessException {
         CamelContext camelContext = new DefaultCamelContext();
         camelContext.getPropertiesComponent().setLocation("classpath:application.properties");
         try {
@@ -37,6 +37,6 @@ public final class CamelConsumer {
         ConsumerTemplate consumerTemplate = camelContext.createConsumerTemplate();
         String consumedMessage = consumerTemplate.receiveBody("kafka:{{consumer.topic}}?brokers={{kafka.brokers}}", String.class);
         System.out.println(consumedMessage);
-            Thread.sleep(10L * 60 * 1000);
+        Thread.sleep(10L * 60 * 1000);
         }
 }

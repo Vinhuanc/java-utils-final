@@ -47,11 +47,11 @@ Automatic Batching based on inputted message type
 Kafka callbacks
 ~~~~~~~~
 
-<<<<<<< HEAD
-##Avro Configuration
+
+## Avro Configuration
 Avro Configuration takes in a configuration map, schema registry URL, schema, and topic name.
 
-###Avro Consumer
+### Avro Consumer
 How to use the Avro Consumer:
 1) Make a configuration Map. In the configuration map, declare a bootstrap server, client id, schema registry URL, and group id.
 
@@ -87,9 +87,9 @@ reusableAvroConsumer.consume(configMap, "topicTest","http://localhost:8081");
 ```
 
 
-##Camel Configuration
+## Camel Configuration
 
-###Camel Consumer:
+### Camel Consumer:
 How to use the Camel Consumer:
 1) Code kafka configurations in application.properties file. Within the application.properties file, declare a kafka broker, schema registry URL, topic name, and group id.
 
@@ -106,22 +106,4 @@ consumer.consumersCount=1
 key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 consumer.seekTo=beginning
-``` 
-2) Get more information about the route builder.
-
-   - If user want to use the default route builder. Do nothing.
-
-   - If user want to use a customized route builder, get the from URI and route id endpoints from the producer.
-
-
-3) Call the startCamel method.
-    - if using the default route builder, do this:
-``` java  
-         CamelConsumer.startCamel(null, null);
-```
-- if using a customized route builder, insert fromURI and routeId as parameters.
-
-    Example:
- ``` java
-        CamelConsumer.startCamel("Kafka1", "route1");
 ``` 
