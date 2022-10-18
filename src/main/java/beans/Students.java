@@ -17,7 +17,7 @@ public class Students {
     }
 
     public String getStudent(){
-        return "students{\"name\": "+ this.name +", \"major\": "+this.major+"}";
+        return "    {\"name\": "+ this.name +", \"major\": "+this.major+"}";
     }
 
 }
