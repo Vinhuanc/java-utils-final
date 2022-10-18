@@ -1,36 +1,15 @@
 package kafka.producer;
-
-import beans.Student;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
-import kafka.consumer.CamelConsumer;
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.generic.GenericRecordBuilder;
+import beans.Students;
+import processor.*;
 import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.component.ComponentsBuilderFactory;
-import org.apache.camel.component.kafka.KafkaConstants;
-import org.apache.camel.dataformat.avro.AvroDataFormat;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.model.RouteDefinition;
-import org.apache.camel.model.dataformat.JacksonXMLDataFormat;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.header.internals.RecordHeaders;
-import org.apache.kafka.common.metrics.stats.Value;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.File;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
-import processor.MapToGenericRecord;
+//import processor.MapToGenericRecord;
 
 public  class CamelProducer {
     public static final Logger LOG = LoggerFactory.getLogger(CamelProducer.class);
@@ -66,9 +45,9 @@ public static void main(String[] args) throws Exception {
               //      AvroDataFormat format = new AvroDataFormat(finalSchema);
                     //    JacksonDataFormat format2 = new JacksonDataFormat(CamelProducer.class);
                     from("direct:kafkaStart")
-                         //   .process(new MapToGenericRecord())
-                            .setBody(constant("Hi This is Avro example"))
-                            .process(new KafkaAvroMessageProcessor())
+                            .process(new MapToGenericRecord())
+                        //    .setBody(constant("Hi This is Avro example"))
+                         //   .process(new KafkaAvroMessageProcessor())
                           //  .log("${body}")
 //                            .marshal().jaxb()
 
@@ -78,16 +57,25 @@ public static void main(String[] args) throws Exception {
             }));
 
             camelContext.start();
-            ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
-            Student testStudent= new Student();
+       //    ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
+                Students testStudent= new Students();
             testStudent.setMajor("biology");
             testStudent.setName("Groot56");
-    Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-    gson.toJson(testStudent);
-            Endpoint endpoint = camelContext.getEndpoint("direct:kafkaStart");
-            producerTemplate.setDefaultEndpoint(endpoint);
-            producerTemplate.sendBody(testStudent);
-            LOG.info("Successfully published event to Kafka.");
+    ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
+    producerTemplate.sendBody("kafka:{{producer.topic}}?brokers={{kafka.brokers}}", testStudent);
+    Endpoint ep = camelContext.getEndpoint("kafka:{{producer.topic}}?brokers={{kafka.brokers}}");
+//    Endpoint endpoint = camelContext.addEndpoint("kafka:{{producer.topic}}?brokers={{kafka.brokers}}",ep);
+//    camelContext.d
+    producerTemplate.setDefaultEndpoint(ep);
+    producerTemplate.sendBody(testStudent);
+   // producerTemplate.sendBody("activemq:MyQueue", "<hello>world!</hello>");
+
+//    Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+//    gson.toJson(testStudent);
+//            Endpoint endpoint = camelContext.getEndpoint("direct:kafkaStart");
+//            producerTemplate.setDefaultEndpoint(endpoint);
+//            producerTemplate.sendBody(testStudent);
+     //       LOG.info("Successfully published event to Kafka.");
        //     GenericRecord recordBuilter = new GenericRecord();
 //            Schema.Parser parser = new Schema.Parser();
 //
