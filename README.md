@@ -47,11 +47,11 @@ Automatic Batching based on inputted message type
 Kafka callbacks
 ~~~~~~~~
 
-<<<<<<< HEAD
-##Avro Configuration
+
+## Avro Configuration
 Avro Configuration takes in a configuration map, schema registry URL, schema, and topic name.
 
-###Avro Consumer
+### Avro Consumer
 How to use the Avro Consumer:
 1) Make a configuration Map. In the configuration map, declare a bootstrap server, client id, schema registry URL, and group id.
 
@@ -87,41 +87,38 @@ reusableAvroConsumer.consume(configMap, "topicTest","http://localhost:8081");
 ```
 
 
-##Camel Configuration
+## Camel Configuration
 
-###Camel Consumer:
-How to use the Camel Consumer:
-1) Code kafka configurations in application.properties file. Within the application.properties file, declare a kafka broker, schema registry URL, topic name, and group id.
-
-   Example application.properties file:
+### Camel Consumer:
+How to use the Camel Consumer
+1. Configure the Applications.Properties file. Change properties to accommodate your topic. 
+     <br>
+            Note: Please see example in src/main/resources/application.properties
 ``` java
-kafka.brokers=localhost:9092         //insert your kafka broker here
-schema.registry.url = http://localhost:8081      //insert your schema registry URL here
+kafka.brokers= //input kafka broker 
+schema.registry.url = //input schema registry URL 
 
-//camel consumer configurations
-consumer.topic=topicTest            //insert your topic name here
-consumer.group=group1               //insert your group id here
+# producer properties
+producer.topic= //input topic name
+key-serializer-class: org.apache.kafka.common.serialization.StringSerializer
+value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+producer.clientId: //input client id
+
+# Consumer properties
+consumer.topic= //input topic name
+consumer.group= //input group name
 consumer.maxPollRecords=5000
 consumer.consumersCount=1
+consumer.seekTo=end
 key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-consumer.seekTo=beginning
-``` 
-2) Get more information about the route builder.
-
-   - If user want to use the default route builder. Do nothing.
-
-   - If user want to use a customized route builder, get the from URI and route id endpoints from the producer.
-
-
-3) Call the startCamel method.
-    - if using the default route builder, do this:
-``` java  
-         CamelConsumer.startCamel(null, null);
+value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 ```
-- if using a customized route builder, insert fromURI and routeId as parameters.
+2. Call the CamelConsumer.camelConsume() method within your consumer class. 
+<br>
+Note: calling the method will throw an error, click on "add exception to method signature". A InterruptedException and IllegalAccessException will be imported.
 
-    Example:
- ``` java
-        CamelConsumer.startCamel("Kafka1", "route1");
-``` 
+``` java
+public static void main(String [] args) throws InterruptedException, IllegalAccessException {
+        CamelConsumer.camelConsume();
+    }
+```
