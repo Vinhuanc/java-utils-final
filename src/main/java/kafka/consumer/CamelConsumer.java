@@ -6,10 +6,9 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.component.ComponentsBuilderFactory;
 import org.apache.camel.impl.DefaultCamelContext;
 import processor.*;
-
 public final class CamelConsumer {
     public static final Logger LOG = LoggerFactory.getLogger(CamelConsumer.class);
-    public CamelConsumer() { }
+    public CamelConsumer() {}
 
     public static void camelConsume() throws InterruptedException, IllegalAccessException {
         CamelContext camelContext = new DefaultCamelContext();
