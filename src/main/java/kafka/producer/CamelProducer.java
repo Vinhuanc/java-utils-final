@@ -10,9 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 public  class CamelProducer {
     public static final Logger LOG = LoggerFactory.getLogger(CamelProducer.class);
-
-    public CamelProducer() throws IOException {
-    }
+    public CamelProducer() throws IOException {  }
 
     public static void main(String[] args) throws Exception {
    //     public static void camelProduce () throws Exception {
@@ -28,6 +26,8 @@ public  class CamelProducer {
                 }
             }));
             camelContext.start();
+
+            //fetch camelCOntext //get the camelcontext
             Students testStudent = new Students();
             testStudent.setMajor("biology");
             testStudent.setName("Groot56837837878373788");
@@ -35,7 +35,6 @@ public  class CamelProducer {
             Endpoint ep = camelContext.getEndpoint("kafka:{{producer.topic}}?brokers={{kafka.brokers}}");
             producerTemplate.setDefaultEndpoint(ep);
             producerTemplate.sendBody(testStudent);
-
             Thread.sleep(10L * 60 * 1000);
         }
   //  }
