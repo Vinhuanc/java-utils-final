@@ -180,7 +180,6 @@ schema.registry.url = //input schema registry URL
 # producer properties
 producer.topic= //input topic name
 key-serializer-class: org.apache.kafka.common.serialization.StringSerializer
-value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
 producer.clientId: //input client id
 
 # Consumer properties
@@ -190,14 +189,29 @@ consumer.maxPollRecords=5000
 consumer.consumersCount=1
 consumer.seekTo=end
 key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 ```
-2. Call the CamelConsumer.camelConsume() method within your consumer class. 
-<br>
-Note: calling the method will throw an error, click on "add exception to method signature". A InterruptedException and IllegalAccessException will be imported.
+2. Get the CamelContext Object. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-If using the default CamelContext, create the default object. Example:
+``` java
+CamelContext camelContext = new DefaultCamelContext();
+```
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-If using own/customized CamelContext object, move to step 3.
+
+
+3. Call the CamelConsumer.camelConsume() method, pass in default/customized CamelContext, and the applications.properties file path. <br> 
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-If using the default CamelContext, example:
+``` java
+CamelConsumer.camelConsume(camelContext,"classpath:application.properties");
+```
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-If using own/customized CamelContext, example:
+``` java
+CamelConsumer.camelConsume(yourCamelContextName,"classpath:application.properties");
+```
+Note: calling the CamelConsumer.camelConsume() method will throw an error due to default camelContext Exception package, click on "add exception to method signature". A InterruptedException and IllegalAccessException will be imported. Any confusions, please see Please see src/test/java/kafka/CamelTest.java as overall example.
 
 ``` java
 public static void main(String [] args) throws InterruptedException, IllegalAccessException {
-        CamelConsumer.camelConsume();
+     CamelConsumer.camelConsume(yourCamelContextName,"classpath:application.properties");
     }
 ```
