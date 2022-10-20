@@ -1,12 +1,13 @@
 package kafka;
-import kafka.producer.*;
+
+import kafka.consumer.AvroConsumer;
+import kafka.producer.AvroProducer;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.junit.Test;
-import kafka.consumer.*;
 import java.util.HashMap;
 import java.util.Map;
 

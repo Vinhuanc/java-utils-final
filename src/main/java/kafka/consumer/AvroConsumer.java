@@ -1,11 +1,8 @@
 package kafka.consumer;
-
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.*;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;

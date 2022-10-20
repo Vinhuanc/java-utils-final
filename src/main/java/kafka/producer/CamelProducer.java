@@ -1,13 +1,12 @@
 package kafka.producer;
-import beans.Students;
-import processor.*;
-import org.apache.camel.*;
+import org.apache.camel.CamelContext;
+import org.apache.camel.Endpoint;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.builder.component.ComponentsBuilderFactory;
-import org.apache.camel.impl.DefaultCamelContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
+
 public  class CamelProducer {
     public static final Logger LOG = LoggerFactory.getLogger(CamelProducer.class);
     public CamelProducer() throws IOException {}

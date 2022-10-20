@@ -1,11 +1,9 @@
 package kafka.consumer;
+import org.apache.camel.CamelContext;
+import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.camel.*;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.builder.component.ComponentsBuilderFactory;
-import org.apache.camel.impl.DefaultCamelContext;
-import processor.*;
+
 public final class CamelConsumer {
     public static final Logger LOG = LoggerFactory.getLogger(CamelConsumer.class);
     public CamelConsumer() {}

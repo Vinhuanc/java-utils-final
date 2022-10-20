@@ -1,10 +1,8 @@
 package kafka.producer;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
